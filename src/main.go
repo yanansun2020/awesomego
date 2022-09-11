@@ -38,19 +38,22 @@ func main() {
 	router.GET("/name", getName)
 	router.GET("/joke", getJoke)
 	router.GET("/status", getStatus)
-	router.Run(":8080")
+	router.Run("0.0.0.0:8080")
 }
 
 func getCombinedJoke(c *gin.Context) {
 	//step1 : get first name and last name
 	name, err := fetchRandomName()
 	if err != nil {
-		log.Println("error while fetching random name")
-		c.Status(http.StatusInternalServerError)
+		msg := "error while fetching random name"
+		log.Println(err)
+		c.IndentedJSON(http.StatusInternalServerError, getErrorStatus(msg, http.StatusInternalServerError))
 		return
 	}
 	if name.FirstName == "" || name.LastName == "" {
-		c.Status(http.StatusInternalServerError)
+		msg := "first name or last name is empty"
+		log.Println(msg)
+		c.IndentedJSON(http.StatusInternalServerError, getErrorStatus(msg, http.StatusInternalServerError))
 		return
 	}
 	//step2 : get a random joke
@@ -60,7 +63,9 @@ func getCombinedJoke(c *gin.Context) {
 	fullName := "John Doe"
 	joke, err := fetchRandomJoke(firstName, lastName, limitTo)
 	if err != nil {
-		c.Status(http.StatusInternalServerError)
+		msg := "error while get joke"
+		log.Println(err)
+		c.IndentedJSON(http.StatusInternalServerError, getErrorStatus(msg, http.StatusInternalServerError))
 		return
 	}
 	if joke.JokeType != "success" {
@@ -149,4 +154,11 @@ func fetchRandomJoke(firstName string, lastName string, limitTo string) (out Jok
 	}
 	json.Unmarshal(resp.Body, &out)
 	return
+}
+func getErrorStatus(message string, code int) status {
+	status := status{
+		Code:    code,
+		Message: message,
+	}
+	return status
 }
