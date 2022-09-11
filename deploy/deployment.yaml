@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: awesomego-deployment
+  #namespace: apple
+  labels:
+    tier: backendapi
+spec:
+  # modify replicas according to your case
+  replicas: 2
+  selector:
+    matchLabels:
+      # key-value pair of the pod label
+      tier: backendapi
+  template:
+    metadata:
+      labels:
+        tier: backendapi
+    spec:
+      containers:
+        - name: awesomego
+          image: zxcarrot/awesomego:v2
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 250m
+              memory: 500Mi
+            requests:
+              cpu: 200m
+              memory: 200Mi
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: 8080
+            periodSeconds: 10
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            successThreshold: 1
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: awesomego-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: awesomego-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
