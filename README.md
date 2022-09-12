@@ -55,3 +55,4 @@ The application can be deployed within a k8s cluster by running the above comman
 2. Make it more configurable: replica numbers, images, port etc. are now hard codes, they should be easy to manage without changing source code
 3. Rate limit: can be added to prevent DoS attack 
 4. helm char: can be added to help manage deployment more automatically
+5. How to handle upstream server error is open to discussion
