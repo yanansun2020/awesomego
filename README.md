@@ -46,7 +46,7 @@ This is a simple API service without considering security issues. For any public
 
 * How does the application respond if external service dependencies misbehave?    
 For now, my API return with status code of 500 with information given tentatively. But it always open to discussion in this case   
-* How will the application be deployed?
+* How will the application be deployed?   
 The application can be deployed within a k8s cluster by running the above command. In the ideal case, it should be managed by helm chars.
 
 
