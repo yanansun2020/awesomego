@@ -9,13 +9,13 @@ The response should look like ```Carmine Wildfong's programs never exit, they te
 **Note: If the first_name or last_name we get from step1 is empty, replace will not happen, and server return a status code of 500 with a message**
 4. "/status" : for liveness check purpose only   
 
-## To run the project locally without docker
+## To run the project without docker
 1. Navigate to the src directory
 2. Run ```go run main.go```
 3. Application will start and listen on port 8080, to change the port, please edit main.go
 4. Visit the application with http://localhost:8080 by default   
 
-## To run the project locally with docker 
+## To run the project with docker 
 1. Build a docker image with the Dockerfile. Run ```docker build -t {image_tag} ., example: docker build -t zxcarrot/awesomego:v2 .```
 2. Run the application in docker container. Run ```docker run -i -t -p {port}:8080 {image_tag}, exmaple: docker run -i -t -p 5000:8080 zxcarrot/awesomego:v2```
 3. Feel free to come up with your own image tag and port.
