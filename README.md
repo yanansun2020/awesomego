@@ -25,7 +25,7 @@ The response should look like ```Carmine Wildfong's programs never exit, they te
 1. Push the image to docker hub. Run ```docker push {image_tag}, example: docker push zxcarrot/awesomego:v2```
 2. Navigate to "deploy" directory   
 2.1. Change the image name to the one you pushed.   
-2.2. Run ``` kubectl apply -f deployment.yaml```. This file will help create a deployment with two replicas, and a hpa(HorizontalPodAutoscaler) with maximum of 10 replicas based on CPU and memory resource.
+2.2. Run ``` kubectl apply -f deployment.yaml```. This file will help create a deployment with two replicas, and a hpa(HorizontalPodAutoscaler) with maximum of 10 replicas based on CPU and memory resource.   
 2.3 Run ```kubectl apply -f service.yaml```. This file will help create a LoadBalancer service, which help visit service
 3. Visit the application with http://localhost:5000 on k8s cluster.   
 **Note: the autoscaling was not tested due to my cluster limitation**
