@@ -50,7 +50,7 @@ For now, my API return with status code of 500 with information given tentativel
 The application can be deployed within a k8s cluster by running the above command. In the ideal case, it should be managed by helm chars.
 
 
-## Places can be improved
+## TODO: Places can be improved
 1. Log: currently using a simple log package without log level
 2. Make it more configurable: replica numbers, images, port etc. are now hard codes, they should be easy to manage without changing source code
 3. Rate limit: can be added to prevent DoS attack 
