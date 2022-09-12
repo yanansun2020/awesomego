@@ -40,7 +40,7 @@ autoscaling should take care of the traffic spike
 (2)number of 5XX/4XX requests    
 (3) number of container restart count    
 * What steps have been taken to secure the service? Are there mitigations to common application security issues?   
-This is a simple AOU service without considering security issue. For any public APIs, we should definitely add    
+This is a simple API service without considering security issues. For any public APIs, we should definitely add    
 (1) Rate limiter in case of DDoS attack   
 (2) If we want to limit anyone who is using the APIs, we can add another OAuth service to help authenticate
 
