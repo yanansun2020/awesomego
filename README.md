@@ -1,10 +1,11 @@
 # awesomego
 This is a Golang webapplication, which include four requests:
-1. "/name": get a random name from https://names.mcquay.me/api/v0/. The response data should look like
-   ```{"first_name":"Patti","last_name":"Flamm"}```
-2. "/joke": get a random joke from "http://api.icndb.com/jokes/random?firstName=John&lastName=Doe&limitTo=[nerdy]". 
+1. "/name": get a random name from https://names.mcquay.me/api/v0/.    
+The response data should look like ```{"first_name":"Patti","last_name":"Flamm"}```
+2. "/joke": get a random joke from "http://api.icndb.com/jokes/random?firstName=John&lastName=Doe&limitTo=[nerdy]".    
 The response data should look like ```{ "type": "success", "value": { "id": 543, "joke": "John Doe'ss programs can pass the Turing Test by staring at the interrogator.", "categories": ["nerdy"] } }```
-3. "/": combine the results from step1 and step2, in which a joke from step2 will be returned to users with "John Doe" be replaced with the name from step1. 
+3. "/": combine the results from step1 and step2, in which a joke from step2 will be returned to users with "John Doe" be replaced with the name from step1.    
+The response should look like ```Carmine Wildfong's programs never exit, they terminate.```
 **Note: If the first_name or last_name we get from step1 is empty, replace will not happen, and server return a status code of 500 with a message**
 4. "/status" : for liveness check purpose only   
 
@@ -49,7 +50,7 @@ For now, my API return with status code of 500 with information given tentativel
 The application can be deployed within a k8s cluster by running the above command. In the ideal case, it should be managed by helm chars.
 
 
-## Places can be improved:
+## Places can be improved
 1. Log: currently using a simple log package without log level
 2. Make it more configurable: replica numbers, images, port etc. are now hard codes, they should be easy to manage without changing source code
 3. Rate limit: can be added to prevent DoS attack 
