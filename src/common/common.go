@@ -44,7 +44,10 @@ type HttpResp struct {
 }
 
 func HttpClientInit() (err error) {
-	httpClient = GetHttpClient(false)
+	//httpClient = GetHttpClient(false)
+	httpClient = &http.Client{
+		Timeout: time.Duration(5 * time.Second),
+	}
 	if httpClient == nil {
 		log.Println("httpClient is nil")
 		return
