@@ -3,6 +3,7 @@ package main
 import (
 	"awesomego/src/common"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -20,6 +21,13 @@ type Name struct {
 	LastName  string `json:"last_name"`
 }
 
+type ResponseBody struct {
+	Response []Name `json:"response"`
+}
+type ResponseB struct {
+	Response map[string][]Name
+}
+
 type JokeDetail struct {
 	Id         int      `json:"id"`
 	Joke       string   `json:"joke"`
@@ -35,10 +43,79 @@ func main() {
 	common.HttpClientInit()
 	router := gin.Default()
 	router.GET("/", getCombinedJoke)
+	router.GET("/test", test)
+	router.GET("/testarray", testarray)
 	router.GET("/name", getName)
 	router.GET("/joke", getJoke)
 	router.GET("/status", getStatus)
-	router.Run("0.0.0.0:8080")
+	router.POST("/post", testPost)
+
+	router.GET("/welcome", func(c *gin.Context) {
+
+		firstname := c.DefaultQuery("firstname", "Guest")
+		lastname := c.Query("lastname") // shortcut for c.Request.URL.Query().Get("lastname")
+		if lastname == "" || len(lastname) == 0 {
+			fmt.Print("last name is empty")
+		}
+		c.String(http.StatusOK, "Hello %s %s", firstname, lastname)
+	})
+
+	router.Run("0.0.0.0:8083")
+}
+
+func testarray(c *gin.Context) {
+	var names []Name
+	names = append(names, Name{FirstName: "syn1", LastName: "sun1"})
+	names = append(names, Name{FirstName: "syn2", LastName: "sun2"})
+	initMap := make(map[string][]Name)
+	initMap["roles"] = names
+	fmt.Println("names is ", names)
+	response := ResponseB{Response: initMap}
+	c.JSON(http.StatusOK, response)
+}
+
+func test(c *gin.Context) {
+	data := make(map[string]string)
+	data["a"] = "a"
+	data["b"] = "b"
+	//s := "this is a test"
+
+	filter := c.Request.Form
+	f := make(map[string]interface{})
+	log.Println(filter)
+	// convert map[string][]string to map[string]interface{}
+	ConvertFilterMaps(filter, f)
+	log.Println(filter)
+	log.Println(f)
+	var names []Name
+	names = append(names, Name{FirstName: "syn1", LastName: "sun1"})
+	names = append(names, Name{FirstName: "syn2", LastName: "sun2"})
+	response := ResponseBody{Response: names}
+	fmt.Println("names is ", names)
+	c.JSON(http.StatusOK, response)
+}
+func testPost(c *gin.Context) {
+	var testName Name
+	err := c.ShouldBindJSON(&testName)
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Println("first name is ", testName.FirstName, " and last name is ", testName.LastName)
+	}
+	c.JSON(http.StatusOK, testName)
+}
+
+// convert map[string][]string to map[string]interface{}
+func ConvertFilterMaps(inFilter map[string][]string, outFilter map[string]interface{}) {
+	for i, j := range inFilter {
+		if j[0] == "true" {
+			outFilter[i] = true
+		} else if j[0] == "false" {
+			outFilter[i] = false
+		} else {
+			outFilter[i] = j[0] // using only the first value
+		}
+	}
 }
 
 func getCombinedJoke(c *gin.Context) {
