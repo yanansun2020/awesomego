@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+//testing
+
 var httpClient *http.Client
 
 const NameServer = "https://names.mcquay.me/api/v0/"
